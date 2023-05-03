@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibMpv.AutoGen.ClangMacroParser", "LibMpv.AutoGen.ClangMacroParser\LibMpv.AutoGen.ClangMacroParser.csproj", "{4CEBEE8A-5F1C-4988-9218-845417B263B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibMpv.AutoGen.CppSharpUnsafeGenerator", "LibMpv.AutoGen.CppSharpUnsafeGenerator\LibMpv.AutoGen.CppSharpUnsafeGenerator.csproj", "{8AB7E1B0-BD1E-4C2C-BE71-DF8EF689F261}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibMpv.Client", "LibMpv.Client\LibMpv.Client.csproj", "{AE20CE75-28C7-47C0-BAE5-379F70E7DB89}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LibMpv.Context", "LibMpv.Context\LibMpv.Context.csproj", "{5A53C3C4-A4E3-40DF-8072-554F627341FF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "generator", "generator", "{CD38A402-42D0-47DD-B357-DBBF9D8FAA44}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "wrapper", "wrapper", "{EE9C368A-CC83-4D1D-A98A-FE2596F8F74E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{3930432A-F5B9-4E64-A723-B25304212693}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.LibMpv.Sample", "Avalonia.LibMpv.Sample\Avalonia.LibMpv.Sample.csproj", "{17BC398F-F9EA-45B0-8BD3-4F479C2F0F30}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4CEBEE8A-5F1C-4988-9218-845417B263B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4CEBEE8A-5F1C-4988-9218-845417B263B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4CEBEE8A-5F1C-4988-9218-845417B263B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4CEBEE8A-5F1C-4988-9218-845417B263B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8AB7E1B0-BD1E-4C2C-BE71-DF8EF689F261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8AB7E1B0-BD1E-4C2C-BE71-DF8EF689F261}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8AB7E1B0-BD1E-4C2C-BE71-DF8EF689F261}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8AB7E1B0-BD1E-4C2C-BE71-DF8EF689F261}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE20CE75-28C7-47C0-BAE5-379F70E7DB89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE20CE75-28C7-47C0-BAE5-379F70E7DB89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE20CE75-28C7-47C0-BAE5-379F70E7DB89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE20CE75-28C7-47C0-BAE5-379F70E7DB89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A53C3C4-A4E3-40DF-8072-554F627341FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A53C3C4-A4E3-40DF-8072-554F627341FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A53C3C4-A4E3-40DF-8072-554F627341FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A53C3C4-A4E3-40DF-8072-554F627341FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17BC398F-F9EA-45B0-8BD3-4F479C2F0F30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17BC398F-F9EA-45B0-8BD3-4F479C2F0F30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17BC398F-F9EA-45B0-8BD3-4F479C2F0F30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17BC398F-F9EA-45B0-8BD3-4F479C2F0F30}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4CEBEE8A-5F1C-4988-9218-845417B263B3} = {CD38A402-42D0-47DD-B357-DBBF9D8FAA44}
+		{8AB7E1B0-BD1E-4C2C-BE71-DF8EF689F261} = {CD38A402-42D0-47DD-B357-DBBF9D8FAA44}
+		{AE20CE75-28C7-47C0-BAE5-379F70E7DB89} = {EE9C368A-CC83-4D1D-A98A-FE2596F8F74E}
+		{5A53C3C4-A4E3-40DF-8072-554F627341FF} = {EE9C368A-CC83-4D1D-A98A-FE2596F8F74E}
+		{17BC398F-F9EA-45B0-8BD3-4F479C2F0F30} = {3930432A-F5B9-4E64-A723-B25304212693}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B83AB40A-9622-46A6-A718-0CE9D9D5A969}
+	EndGlobalSection
+EndGlobal
