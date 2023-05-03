@@ -1,12 +1,10 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using LibMpv.Client;
-using System;
 
 namespace Avalonia.LibMpv.Sample;
 
@@ -42,7 +40,7 @@ public class SoftwareVideoView: Control
 
     public override void Render(DrawingContext context)
     {
-        if (_mpvContext == null || VisualRoot == null)
+        if (VisualRoot == null || _mpvContext == null)
             return;
 
         var bitmapSize = GetPixelSize();
@@ -60,8 +58,8 @@ public class SoftwareVideoView: Control
     private PixelSize GetPixelSize()
     {
         var scaling = VisualRoot!.RenderScaling;
-        return new PixelSize(Math.Max(1, (int)(Bounds.Width * scaling)),Math.Max(1, (int)(Bounds.Height * scaling)));
-        //return new PixelSize((int)Bounds.Width, (int)Bounds.Height);
+        //return new PixelSize(Math.Max(1, (int)(Bounds.Width * scaling)),Math.Max(1, (int)(Bounds.Height * scaling)));
+        return new PixelSize((int)Bounds.Width, (int)Bounds.Height);
     }
 
     private void UpdateVideoView()

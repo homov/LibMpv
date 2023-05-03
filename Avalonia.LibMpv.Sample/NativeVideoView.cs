@@ -9,6 +9,7 @@ using Avalonia.Platform;
 using Avalonia.VisualTree;
 using LibMpv.Client;
 using System;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 
@@ -120,7 +121,6 @@ public class NativeVideoView : NativeControlHost
     private void InitializeNativeOverlay()
     {
         if (!this.IsAttachedToVisualTree()) return;
-        //if (!((IVisual)this).IsAttachedToVisualTree) return;
 
         if (_floatingContent == null && Content != null)
         {
