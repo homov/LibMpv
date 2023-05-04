@@ -3,7 +3,6 @@ using DynamicData.Binding;
 using LibMpv.Client;
 using ReactiveUI;
 using System;
-using System.Windows.Input;
 
 namespace Avalonia.LibMpv.Sample;
 
