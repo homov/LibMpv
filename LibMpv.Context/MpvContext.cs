@@ -90,12 +90,12 @@ public unsafe partial class MpvContext : IDisposable
         CheckCode(code);
     }
 
-    public ulong GetPropertyLong(string name)
+    public long GetPropertyLong(string name)
     {
         CheckDisposed();
         int code;
-        var value = new ulong[1] { 0 };
-        fixed (ulong* valuePtr = value)
+        var value = new long[1] { 0 };
+        fixed (long* valuePtr = value)
         {
             code = mpv_get_property(ctx, name, mpv_format.MPV_FORMAT_INT64, valuePtr);
         }
