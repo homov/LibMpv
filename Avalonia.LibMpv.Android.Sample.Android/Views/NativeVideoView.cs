@@ -1,16 +1,80 @@
-﻿using Avalonia.Controls;
+﻿using Android.Content;
+using Android.Graphics;
+using Android.Runtime;
+using Android.Views;
+using AW=Android.Widget;
+using Avalonia.Android;
+using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Platform;
 using LibMpv.Client;
 using System;
-using System.Diagnostics;
+using System.Runtime.InteropServices;
+using AndroidApplication = Android.App.Application;
 
 namespace Avalonia.LibMpv.Android.Sample.Android.Views;
 
 public class NativeVideoView : NativeControlHost
 {
+    public class MpvSurfaceView : SurfaceView, ISurfaceHolderCallback
+    {
+        MpvContext? _mpvContext = null;
 
-    private IPlatformHandle? _platformHandle = null;
+        private IntPtr _nativeHandle = IntPtr.Zero;
+
+        public IntPtr NativeHandle { get { return _nativeHandle; } }
+
+        public MpvSurfaceView(Context context):base(context)
+        {
+            Holder.AddCallback(this);
+        }
+
+        public void SurfaceChanged(ISurfaceHolder holder, [GeneratedEnum] Format format, int width, int height)
+        {
+            if (_mpvContext!=null)
+            {
+                _mpvContext.SetPropertyString("android-surface-size",$"{width}x{height}");
+            }
+        }
+
+        public void SurfaceCreated(ISurfaceHolder holder)
+        {
+            _nativeHandle = holder.Surface.Handle;
+            if (_mpvContext != null)
+                Attach(_mpvContext);
+        }
+
+        public void SurfaceDestroyed(ISurfaceHolder holder)
+        {
+            Detach();
+            if (_nativeHandle != IntPtr.Zero)
+            {
+                _nativeHandle = IntPtr.Zero;
+            }
+        }
+
+        public void Attach(MpvContext mpvContext)
+        {
+            _mpvContext = mpvContext;
+            if (NativeHandle != IntPtr.Zero )
+                _mpvContext.StartNativeRendering(NativeHandle);
+        }
+
+        public void Detach()
+        {
+            if (_mpvContext != null)
+                _mpvContext.StopRendering();
+            _mpvContext = null;
+        }
+
+        [DllImport("android")]
+        private static extern IntPtr ANativeWindow_fromSurface(IntPtr jni, IntPtr surface);
+
+        [DllImport("android")]
+        private static extern void ANativeWindow_release(IntPtr surface);
+    }
+
+    private MpvSurfaceView? _mpvSurfaceView = null;
     
     private MpvContext? _mpvContext = null;
 
@@ -30,43 +94,26 @@ public class NativeVideoView : NativeControlHost
             if (ReferenceEquals(value, _mpvContext)) return;
             _mpvContext?.StopRendering();
             _mpvContext = value;
-            if (_platformHandle != null)
-                _mpvContext?.StartNativeRendering(_platformHandle.Handle);
+            if (_mpvSurfaceView != null)
+                _mpvSurfaceView?.Attach(_mpvContext);
         }
     }
-
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (change.Property.Name == "Bounds")
-        {
-            var size = GetPixelSize();
-            var param = $"{size.Width}x{size.Height}";
-            _mpvContext?.SetPropertyString("android-surface-size", param);
-        }
-    }
-
-    private PixelSize GetPixelSize()
-    {
-        var scaling = VisualRoot!.RenderScaling;
-        return new PixelSize(Math.Max(1, (int)(Bounds.Width)), Math.Max(1, (int)(Bounds.Height)));
-    }
-
 
     protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
     {
-        _platformHandle = base.CreateNativeControlCore(parent);
-        _mpvContext?.StartNativeRendering(_platformHandle.Handle);
-        return _platformHandle;
+        if (parent is AndroidViewControlHandle handle)
+        {
+            _mpvSurfaceView = new MpvSurfaceView(handle.View.Context);
+            if (_mpvContext != null) _mpvSurfaceView.Attach(_mpvContext);
+            _mpvSurfaceView.SetZOrderOnTop(true);
+        }
+        return new AndroidViewControlHandle(_mpvSurfaceView);
     }
 
     protected override void DestroyNativeControlCore(IPlatformHandle control)
     {
-        _mpvContext?.StopRendering();
+        _mpvSurfaceView?.Detach();
+        _mpvSurfaceView = null;
         base.DestroyNativeControlCore(control);
-        if (_platformHandle != null)
-        {
-            _platformHandle = null;
-        }
     }
 }
