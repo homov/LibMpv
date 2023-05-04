@@ -55,9 +55,9 @@ public class MpvMvvmContext : INotifyPropertyChanged
 
 
     public MpvContext? Context { get; } = new MpvContext();
-    
-    
-    // Some commands
+
+
+    // Some commands. Full list: https://mpv.io/manual/master/#list-of-input-commands
 
     // Load media
     public void Load(string mediaLocation)
@@ -78,7 +78,7 @@ public class MpvMvvmContext : INotifyPropertyChanged
     }
 
 
-    // Some properties
+    // Some properties. Full list: https://mpv.io/manual/master/#properties
 
     public long? Duration
     {
