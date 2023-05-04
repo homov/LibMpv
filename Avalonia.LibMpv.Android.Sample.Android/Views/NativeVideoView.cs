@@ -2,7 +2,6 @@
 using Android.Graphics;
 using Android.Runtime;
 using Android.Views;
-using AW=Android.Widget;
 using Avalonia.Android;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -10,7 +9,6 @@ using Avalonia.Platform;
 using LibMpv.Client;
 using System;
 using System.Runtime.InteropServices;
-using AndroidApplication = Android.App.Application;
 
 namespace Avalonia.LibMpv.Android.Sample.Android.Views;
 
