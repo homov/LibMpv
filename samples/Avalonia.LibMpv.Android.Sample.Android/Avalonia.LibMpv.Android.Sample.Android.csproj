@@ -27,10 +27,10 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<AndroidNativeLibrary Include="..\mpv\android\x86_64\*" />
-		<AndroidNativeLibrary Include="..\mpv\android\arm64-v8a\*" />
-		<AndroidNativeLibrary Include="..\mpv\android\armeabi-v7a\*" />
-		<AndroidNativeLibrary Include="..\mpv\android\x86\*" />
+		<AndroidNativeLibrary Include="..\..\mpv\android\x86_64\*" />
+		<AndroidNativeLibrary Include="..\..\mpv\android\arm64-v8a\*" />
+		<AndroidNativeLibrary Include="..\..\mpv\android\armeabi-v7a\*" />
+		<AndroidNativeLibrary Include="..\..\mpv\android\x86\*" />
 	</ItemGroup>
 
 	<ItemGroup>
