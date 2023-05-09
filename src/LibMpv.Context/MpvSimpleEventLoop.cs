@@ -43,7 +43,6 @@ public unsafe class MpvSimpleEventLoop : IEventLoop, IDisposable
                 var @event = MarshalHelper.PtrToStructure<mpv_event>((nint)eventPtr);
                 if (@event.event_id != mpv_event_id.MPV_EVENT_NONE)
                 {
-                    //Console.WriteLine($"MPV Event:  {@event.event_id} => {mpv_event_name(@event.event_id)}");
                     handleEvent(@event);
                 }
             }

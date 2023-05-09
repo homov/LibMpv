@@ -32,12 +32,11 @@ public unsafe class MpvThreadEventLoop : IEventLoop, IDisposable
         while (isEventLoopRunning)
         {
             var eventPtr = mpv_wait_event(context, -1);
-            if (eventPtr == null)
+            if (eventPtr != null)
             {
                 var @event = MarshalHelper.PtrToStructure<mpv_event>((nint)eventPtr);
                 if (@event.event_id != mpv_event_id.MPV_EVENT_NONE)
                 {
-                    Console.WriteLine($"MPV Event: {Enum.GetName(typeof(mpv_event_id), @event.event_id)}");
                     handleEvent(@event);
                 }
             }
