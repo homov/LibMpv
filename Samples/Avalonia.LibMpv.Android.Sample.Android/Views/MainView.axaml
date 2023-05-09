@@ -38,5 +38,4 @@
                 Content="Stop" />
         </StackPanel>
     </Grid>
-
 </UserControl>

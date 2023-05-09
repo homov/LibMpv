@@ -1,6 +1,5 @@
 ﻿using LibMpv.Client.Native;
 using System.Runtime.InteropServices;
-using System.Runtime.InteropServices.ComTypes;
 
 namespace LibMpv.Client;
 
@@ -13,8 +12,6 @@ public static class FunctionResolverFactory
 
     public static IFunctionResolver Create()
     {
-        
-
         var os = System.Environment.OSVersion;
         switch (GetPlatformId())
         {

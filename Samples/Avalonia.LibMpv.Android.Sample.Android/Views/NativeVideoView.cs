@@ -1,5 +1,6 @@
 ﻿using Android.Content;
 using Android.Graphics;
+using Android.Opengl;
 using Android.Runtime;
 using Android.Views;
 using Avalonia.Android;
@@ -8,7 +9,6 @@ using Avalonia.Data;
 using Avalonia.Platform;
 using LibMpv.Client;
 using System;
-using System.Runtime.InteropServices;
 
 namespace Avalonia.LibMpv.Android.Sample.Android.Views;
 
@@ -24,6 +24,7 @@ public class NativeVideoView : NativeControlHost
 
         public MpvSurfaceView(Context context):base(context)
         {
+            this.SetZOrderMediaOverlay(true);
             Holder.AddCallback(this);
         }
 
@@ -64,12 +65,6 @@ public class NativeVideoView : NativeControlHost
                 _mpvContext.StopRendering();
             _mpvContext = null;
         }
-
-        [DllImport("android")]
-        private static extern IntPtr ANativeWindow_fromSurface(IntPtr jni, IntPtr surface);
-
-        [DllImport("android")]
-        private static extern void ANativeWindow_release(IntPtr surface);
     }
 
     private MpvSurfaceView? _mpvSurfaceView = null;
@@ -103,7 +98,6 @@ public class NativeVideoView : NativeControlHost
         {
             _mpvSurfaceView = new MpvSurfaceView(handle.View.Context);
             if (_mpvContext != null) _mpvSurfaceView.Attach(_mpvContext);
-            _mpvSurfaceView.SetZOrderOnTop(true);
         }
         return new AndroidViewControlHandle(_mpvSurfaceView);
     }

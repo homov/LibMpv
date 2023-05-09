@@ -1,7 +1,7 @@
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Markup.Xaml;
 using Avalonia.LibMpv.Android.Sample.ViewModels;
 using Avalonia.LibMpv.Android.Sample.Views;
+using Avalonia.Markup.Xaml;
 using LibMpvClient = LibMpv.Client;
 
 namespace Avalonia.LibMpv.Android.Sample;

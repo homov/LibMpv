@@ -194,6 +194,7 @@ public unsafe partial class MpvContext : IDisposable
     {
         CheckDisposed();
         int code = mpv_request_event(ctx, @event, enabled ? 1 : 0);
+        CheckCode(code);
     }
 
     public string EventName(mpv_event_id @event)

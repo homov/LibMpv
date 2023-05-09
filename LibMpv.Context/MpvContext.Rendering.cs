@@ -5,6 +5,7 @@ namespace LibMpv.Client;
 
 public delegate nint GetProcAddress(string name);
 public delegate void UpdateCallback();
+
 public unsafe partial class MpvContext
 {
     public void StartOpenGlRendering(GetProcAddress getProcAddress, UpdateCallback updateCallback)

@@ -20,6 +20,7 @@ public class MainViewModel
 
     public void Play()
     {
+        Context.SetOptionString("force-window", "yes");
         Context.Command("loadfile", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", "replace");
         Context.SetPropertyFlag("pause", false);
     }
