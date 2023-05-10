@@ -9,7 +9,10 @@ public class AndroidFunctionResolver : FunctionResolverBase
 
     private const int RTLD_NOW = 0x002;
 
-    protected override string GetNativeLibraryName(string libraryName, int version) => $"{libraryName}.so.{version}";
+    protected override string GetNativeLibraryName(string libraryName, int version)
+    {
+        return version > 0 ? $"{libraryName}.so.{version}" : $"{libraryName}.so";
+    } 
 
     protected override IntPtr LoadNativeLibrary(string libraryName) => dlopen(libraryName, RTLD_NOW);
 

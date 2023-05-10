@@ -17,4 +17,4 @@ The Avalonia.LibMpv.Sample project contains an example implementation of a contr
 
 # Avalonia.LibMpv.Android.Sample.Android
 
-Quick test Android + Avalonia + Libmpv. Currently only software rendering works :( ....
+Quick test Android + Avalonia + Libmpv. Success! 

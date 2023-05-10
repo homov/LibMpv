@@ -9,6 +9,11 @@ public class MainViewModel
 
     public MainViewModel()
     {
+        Context.SetOptionString("vo", "gpu");
+        Context.SetOptionString("gpu-debug", "yes");
+        Context.SetOptionString("gpu-context", "android");
+        Context.SetOptionString("opengl-es", "yes");
+
         Context.RequestLogMessages("debug");
         Context.LogMessage += Context_LogMessage;
     }
@@ -20,13 +25,12 @@ public class MainViewModel
 
     public void Play()
     {
-        Context.SetOptionString("force-window", "yes");
         Context.Command("loadfile", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", "replace");
         Context.SetPropertyFlag("pause", false);
     }
 
     public void Stop()
     {
-        Context.Command("stop");
+        Context.Command("pause");
     }
 }

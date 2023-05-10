@@ -1,6 +1,5 @@
 ﻿using Android.Content;
 using Android.Graphics;
-using Android.Opengl;
 using Android.Runtime;
 using Android.Views;
 using Avalonia.Android;
@@ -24,7 +23,7 @@ public class NativeVideoView : NativeControlHost
 
         public MpvSurfaceView(Context context):base(context)
         {
-            this.SetZOrderMediaOverlay(true);
+            this.SetZOrderOnTop(true);
             Holder.AddCallback(this);
         }
 
@@ -94,11 +93,14 @@ public class NativeVideoView : NativeControlHost
 
     protected override IPlatformHandle CreateNativeControlCore(IPlatformHandle parent)
     {
-        if (parent is AndroidViewControlHandle handle)
-        {
-            _mpvSurfaceView = new MpvSurfaceView(handle.View.Context);
-            if (_mpvContext != null) _mpvSurfaceView.Attach(_mpvContext);
-        }
+        var parentContext = (parent as AndroidViewControlHandle)?.View.Context
+            ?? global::Android.App.Application.Context;
+
+        _mpvSurfaceView = new MpvSurfaceView(parentContext);
+        
+
+        if (_mpvContext != null) _mpvSurfaceView.Attach(_mpvContext);
+
         return new AndroidViewControlHandle(_mpvSurfaceView);
     }
 

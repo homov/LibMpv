@@ -15,7 +15,7 @@
         VerticalAlignment="Stretch"
         ColumnDefinitions="*"
         RowDefinitions="*,Auto">
-        <v:SoftwareVideoView
+        <v:NativeVideoView
             Grid.Row="0"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
