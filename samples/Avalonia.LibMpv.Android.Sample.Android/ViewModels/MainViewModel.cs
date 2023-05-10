@@ -1,4 +1,5 @@
-﻿using LibMpv.Client;
+﻿using DynamicData.Tests;
+using LibMpv.Client;
 using System.Diagnostics;
 
 namespace Avalonia.LibMpv.Android.Sample.ViewModels;
@@ -31,6 +32,6 @@ public class MainViewModel
 
     public void Stop()
     {
-        Context.Command("pause");
+        Context.SetPropertyFlag("pause", true);
     }
 }
