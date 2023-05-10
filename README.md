@@ -18,3 +18,4 @@ The Avalonia.LibMpv.Sample project contains an example implementation of a contr
 # Avalonia.LibMpv.Android.Sample.Android
 
 Quick test Android + Avalonia + Libmpv. Success! 
+Libmpv binaries are taken from the project https://github.com/mpv-android/mpv-android
