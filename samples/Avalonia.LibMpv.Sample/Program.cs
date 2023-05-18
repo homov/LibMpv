@@ -13,20 +13,38 @@ namespace Avalonia.LibMpv.Sample
         [STAThread]
         public static void Main(string[] args)
         {
-            // Linux libmpv path
-            if (FunctionResolverFactory.GetPlatformId() == PlatformID.Unix)
-            {
-                libmpv.RootPath = "/lib/x86_64-linux-gnu";
-
-                // If there is version 1 of libmpv, then load it instead of verison 2
-                if (System.IO.File.Exists(System.IO.Path.Combine(libmpv.RootPath, "libmpv.so.1")))
-                {
-                    
-                    libmpv.LibraryVersionMap["libmpv"] = 1;
-                }
-            }
+            FindLibMpv();
 
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+        }
+
+        private static void FindLibMpv()
+        {
+            var libMpvVersions = new[] { 2, 1 };
+
+            // Search libmpv path on Linux
+            if (FunctionResolverFactory.GetPlatformId() == PlatformID.Unix)
+            {
+                var libraryFolders = new[] {
+                    "/lib/x86_64-linux-gnu",
+                    "/usr/lib"
+                };
+
+                foreach (var folder in libraryFolders)
+                {
+                    foreach (var version in libMpvVersions)
+                    {
+                        var fullPath = System.IO.Path.Combine(folder, $"libmpv.so.{version}");
+                        if (System.IO.File.Exists(fullPath))
+                        {
+                            //Set path and libmpv version
+                            libmpv.RootPath = folder;
+                            libmpv.LibraryVersionMap["libmpv"] = version;
+                            return;
+                        }
+                    }
+                }
+            }
         }
 
         // Avalonia configuration, don't remove; also used by visual designer.
