@@ -40,7 +40,7 @@ public class MainWindowModel: ReactiveObject
             this.OpenGLMpvContext,
             this.SoftwareMpvContext
         };
-        this.WhenValueChanged(t => t.SelectedContext).Subscribe((_) => this.Pause());
+        this.WhenValueChanged(t => t.SelectedContext).Subscribe((_) => this.PauseAll());
     }
 
     public void Play()
