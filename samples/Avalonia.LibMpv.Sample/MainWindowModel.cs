@@ -45,7 +45,7 @@ public class MainWindowModel: ReactiveObject
 
     public void Play()
     {
-        Pause();
+        PauseAll();
         Dispatcher.UIThread.Post(() =>
         {
             if (SelectedContext >= 0 && SelectedContext < contexts.Length)
@@ -55,14 +55,26 @@ public class MainWindowModel: ReactiveObject
             }
         });
     }
-
-    public void Pause()
+    public void PauseAll()
     {
         Dispatcher.UIThread.Post(() =>
         {
             foreach (var context in contexts)
             {
                 context.SetPropertyFlag("pause", true);
+            }
+        });
+
+    }
+
+
+    public void Pause()
+    {
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (SelectedContext >= 0 && SelectedContext < contexts.Length)
+            {
+                contexts[SelectedContext].Command("cycle", "pause");
             }
         });
 
