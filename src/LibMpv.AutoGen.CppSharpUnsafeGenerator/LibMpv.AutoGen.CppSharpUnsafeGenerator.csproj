@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CppSharp" Version="1.0.45.22293" />
-    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.6.0-1.final">
+    <PackageReference Include="CppSharp" Version="1.0.54.626" />
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.6.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

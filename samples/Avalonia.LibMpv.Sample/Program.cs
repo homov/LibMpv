@@ -1,6 +1,4 @@
-﻿using Avalonia;
-using Avalonia.OpenGL;
-using LibMpv.Client;
+﻿using LibMpv.Client;
 using System;
 
 namespace Avalonia.LibMpv.Sample

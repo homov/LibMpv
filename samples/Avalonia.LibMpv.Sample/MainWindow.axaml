@@ -18,7 +18,6 @@
                 <local:SoftwareVideoView MpvContext="{Binding SoftwareMpvContext}" />
             </TabItem>
         </TabControl>
-
         <Grid
             Grid.Row="1"
             HorizontalAlignment="Stretch"

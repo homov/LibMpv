@@ -55,6 +55,7 @@ public class MainWindowModel: ReactiveObject
             }
         });
     }
+
     public void PauseAll()
     {
         Dispatcher.UIThread.Post(() =>
@@ -66,7 +67,6 @@ public class MainWindowModel: ReactiveObject
         });
 
     }
-
 
     public void Pause()
     {

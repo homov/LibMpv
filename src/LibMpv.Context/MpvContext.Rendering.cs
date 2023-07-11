@@ -69,45 +69,47 @@ public unsafe partial class MpvContext
         if (disposed) return;
         if (renderContext == null) return;
 
-        using MarshalHelper marshalHelper = new MarshalHelper();
-
-        var fbo = new mpv_opengl_fbo()
+        var fboArray = new mpv_opengl_fbo[1] { new()
         {
             w = width,
             h = height,
             fbo = fb
-        };
-        
-        GCHandle handle = GCHandle.Alloc(fbo,GCHandleType.Pinned);
+        } };
 
-        var parameters = new mpv_render_param[]
-        {
-            new()
-            {
-                type= mpv_render_param_type.MPV_RENDER_PARAM_OPENGL_FBO,
-                data=(void*)&fbo
-            },
-            new()
-            {
-                type= mpv_render_param_type.MPV_RENDER_PARAM_FLIP_Y,
-                data = (void *) marshalHelper.AllocHGlobalValue(flipY)
-            },
-            new() 
-            { 
-                type= mpv_render_param_type.MPV_RENDER_PARAM_INVALID
-            },
-        };
+        var flipYArray = new int[1] { flipY };
 
         int errorCode = 0;
-        fixed (mpv_render_param* parametersPtr = parameters)
+        fixed (mpv_opengl_fbo* fboArrayPtr = fboArray)
         {
-            errorCode = mpv_render_context_render(renderContext, parametersPtr);
+            fixed (int* flipYArrayPtr = flipYArray)
+            {
+                var parameters = new mpv_render_param[]
+                {
+                    new()
+                    {
+                        type= mpv_render_param_type.MPV_RENDER_PARAM_OPENGL_FBO,
+                        data = (byte*) fboArrayPtr
+                    },
+                    new()
+                    {
+                        type= mpv_render_param_type.MPV_RENDER_PARAM_FLIP_Y,
+                        data = (byte*) flipYArrayPtr
+                    },
+                    new()
+                    {
+                        type= mpv_render_param_type.MPV_RENDER_PARAM_INVALID
+                    },
+                };
+                fixed (mpv_render_param* parametersPtr = parameters)
+                {
+                    errorCode = mpv_render_context_render(renderContext, parametersPtr);
+                }
+            }
         }
-        handle.Free();
 
         CheckCode(errorCode);
-       
     }
+
 
     public void StartSoftwareRendering(UpdateCallback updateCallback)
     {

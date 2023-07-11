@@ -18,12 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Avalonia" Version="11.0.0-preview7" />
-	  <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.0-preview7" />
+	  <PackageReference Include="Avalonia" Version="11.0.999-cibuild0037568-beta" />
+	  <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.999-cibuild0037568-beta" />
 	  <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
-	  <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.0-preview7" />
-	  <PackageReference Include="Avalonia.Android" Version="11.0.0-preview7" />
-	  <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.0-preview7" />
+	  <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.999-cibuild0037568-beta" />
+	  <PackageReference Include="Avalonia.Android" Version="11.0.999-cibuild0037568-beta" />
+	  <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.999-cibuild0037568-beta" />
   </ItemGroup>
 
 	<ItemGroup>
