@@ -23,7 +23,11 @@ To-Do:
 - MacOS
 
 
-
 LibMpv.WPF
 ----------
 VideoView (NativeVideoView) control for WPF
+
+
+Native binaries
+---------------
+Platform-specific libraries taken from the project  [media_kit](https://github.com/media-kit/media-kit).
