@@ -12,6 +12,17 @@ LibMpv.Avalonia
 ---------------
 VideoView (NativeVideoView, OpenGlVideoView, SoftwareVideoView) control for AvaloniaUI
 
+What works:
+
+- Linux (renderers - OpenGl, Software)
+- Windows (renderers - OpenGl, Software, Native window)
+
+To-Do:
+- Android
+- iOS
+- MacOS
+
+
 
 LibMpv.WPF
 ----------
