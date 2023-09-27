@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace LibMpv.Client.Native;
+namespace LibMpv.Client;
 
 public class AndroidFunctionResolver : FunctionResolverBase
 {

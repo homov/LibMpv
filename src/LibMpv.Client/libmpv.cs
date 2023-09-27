@@ -1,31 +1,52 @@
 ﻿namespace LibMpv.Client;
-
-public partial class libmpv
+public partial class LibMpv
 {
-    public static readonly int EAGAIN;
+    internal static readonly int EAGAIN;
 
-    public static readonly int ENOMEM = 12;
+    internal static readonly int ENOMEM = 12;
 
-    public static readonly int EINVAL = 22;
+    internal static readonly int EINVAL = 22;
 
-    public static readonly int EPIPE = 32;
+    internal static readonly int EPIPE = 32;
 
-    static libmpv()
+    static LibMpv()
     {
         EAGAIN = FunctionResolverFactory.GetPlatformId() switch
         {
-            PlatformID.MacOSX => 35,
+            LibMpvPlatformID.MacOSX => 35,
             _ => 11
         };
 
         DynamicallyLoadedBindings.Initialize();
     }
 
-
     /// <summary>
     ///     Gets or sets the root path for loading libraries.
     /// </summary>
     /// <value>The root path.</value>
-    public static string RootPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
+    internal static string RootPath { get; set; } = AppDomain.CurrentDomain.BaseDirectory;
 
+    public static ConfigurationBuilder UseLibMpv(int version) =>new ConfigurationBuilder().UseLibMpv(version);
+    
+
+    public class ConfigurationBuilder
+    {
+        public ConfigurationBuilder UseLibMpv(int version)
+        {
+            LibraryVersionMap["libmpv"] = version;
+            return this;
+        }
+
+        public ConfigurationBuilder UserJVM(IntPtr jvmPtr)
+        {
+            LibMpv.MpvLavcSetJavaVm(jvmPtr);
+            return this;
+        }
+
+        public ConfigurationBuilder UseLibraryPath(string path)
+        {
+            RootPath = path;
+            return this;
+        }
+    }
 }

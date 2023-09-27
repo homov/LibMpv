@@ -3,15 +3,31 @@ using System.Text;
 
 namespace LibMpv.Client;
 
-public class MarshalHelper : IDisposable
+public unsafe class MarshalHelper : IDisposable
 {
     bool disposed = false;
-    public static TStruct PtrToStructure<TStruct>(IntPtr ptr) where TStruct : struct
+
+    public static TStruct? PtrToStructure<TStruct>(void* ptr) where TStruct : struct
+    {
+        return PtrToStructure<TStruct>((IntPtr)ptr);
+    }
+
+    public static TStruct? PtrToStructure<TStruct>(IntPtr ptr) where TStruct : struct
     {
         if (ptr == IntPtr.Zero)
-            throw new ArgumentException("Invalid pointer.");
+            return null;
+        return (TStruct?)Marshal.PtrToStructure(ptr, typeof(TStruct));
+    }
 
-        return (TStruct)Marshal.PtrToStructure(ptr, typeof(TStruct));
+
+    public static string PtrToStringUTF8OrEmpty(byte* ptr)
+    {
+        return PtrToStringUTF8OrEmpty((IntPtr)ptr);
+    }
+
+    public static string? PtrToStringUTF8OrNull(byte* ptr)
+    {
+        return PtrToStringUTF8OrNull((IntPtr)ptr);
     }
 
 

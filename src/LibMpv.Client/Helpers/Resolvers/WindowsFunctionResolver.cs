@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace LibMpv.Client.Native;
+namespace LibMpv.Client;
 
 public class WindowsFunctionResolver : FunctionResolverBase
 {
     private const string Kernel32 = "kernel32";
 
-    protected override string GetNativeLibraryName(string libraryName, int version) => $"{libraryName}-{version}.dll";
+    protected override string GetNativeLibraryName(string libraryName, int version)
+    {
+        if (version > 0) return $"{libraryName}-{version}.dll";
+        return $"{libraryName}.dll";
+    }
 
     protected override IntPtr LoadNativeLibrary(string libraryName) => LoadLibrary(libraryName);
     protected override IntPtr FindFunctionPointer(IntPtr nativeLibraryHandle, string functionName) => GetProcAddress(nativeLibraryHandle, functionName);

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace LibMpv.Client.Native;
+namespace LibMpv.Client;
 
 public class MacFunctionResolver : FunctionResolverBase
 {
@@ -9,7 +9,11 @@ public class MacFunctionResolver : FunctionResolverBase
 
     private const int RTLD_NOW = 0x002;
 
-    protected override string GetNativeLibraryName(string libraryName, int version) => $"{libraryName}.{version}.dylib";
+    protected override string GetNativeLibraryName(string libraryName, int version)
+    {
+        if (version > 0) return $"{libraryName}.{version}.dylib";
+        return $"{libraryName}.dylib";
+    }
     protected override IntPtr LoadNativeLibrary(string libraryName) => dlopen(libraryName, RTLD_NOW);
     protected override IntPtr FindFunctionPointer(IntPtr nativeLibraryHandle, string functionName) => dlsym(nativeLibraryHandle, functionName);
 

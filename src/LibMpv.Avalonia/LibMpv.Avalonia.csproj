@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net6.0;netstandard2.0;net6.0-android</TargetFrameworks>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<IsAndroid>false</IsAndroid>
+		<IsAndroid Condition="'$([MSBuild]::GetTargetPlatformIdentifier($(TargetFramework)))'=='android'">true</IsAndroid>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Avalonia" Version="11.0.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LibMpv.Client\LibMpv.Client.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Remove="**\*.Desktop.cs" />
+		<Compile Remove="**\*.Android.cs" />
+		<None Include="**\*.Desktop.cs" />
+		<None Include="**\*.Android.cs" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(IsAndroid)">
+		<PackageReference Include="Avalonia.Android" Version="11.0.4" />
+		<Compile Include="**\*.Android.cs" />
+	</ItemGroup>
+
+	<ItemGroup Condition="$(IsAndroid) == false">
+		<Compile Include="**\*.Desktop.cs" />
+	</ItemGroup>
+
+</Project>

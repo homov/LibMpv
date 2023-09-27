@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFrameworks>net6.0</TargetFrameworks>
+		<Nullable>enable</Nullable>
+		<BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+		<ApplicationManifest>app.manifest</ApplicationManifest>
+		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<None Include="..\..\..\natives\windows\x86\libmpv-2.dll" Link="x86\libmpv-2.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\natives\windows\x86_64\libmpv-2.dll" Link="x86_64\libmpv-2.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="Avalonia" Version="11.0.4" />
+		<PackageReference Include="Avalonia.Desktop" Version="11.0.4" />
+		<PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.4" />
+		<PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.4" />
+		<!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+		<PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.4" />
+		<PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.0.2" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+		<PackageReference Include="FluentAvaloniaUI" Version="2.0.4" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\LibMpv.Avalonia\LibMpv.Avalonia.csproj" />
+	</ItemGroup>
+</Project>
