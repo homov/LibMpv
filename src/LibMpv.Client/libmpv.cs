@@ -1,6 +1,7 @@
 ﻿namespace LibMpv.Client;
 public partial class LibMpv
 {
+
     internal static readonly int EAGAIN;
 
     internal static readonly int ENOMEM = 12;
