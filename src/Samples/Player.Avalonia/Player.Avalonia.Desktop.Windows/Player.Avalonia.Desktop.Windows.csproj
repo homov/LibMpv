@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <!--If you are willing to use Windows/MacOS native APIs you will need to create 3 projects.
+    One for Windows with net7.0-windows TFM, one for MacOS with net7.0-macos and one with net7.0 TFM for Linux.-->
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Player.Avalonia.Desktop\Program.cs" Link="Program.cs" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\..\..\natives\windows\x86\libmpv-2.dll" Link="x86\libmpv-2.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="..\..\..\..\natives\windows\x86_64\libmpv-2.dll" Link="x86_64\libmpv-2.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+    <PackageReference Include="Avalonia.Desktop" Version="11.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\LibMpv.Client\LibMpv.Client.csproj" />
+    <ProjectReference Include="..\Player.Avalonia\Player.Avalonia.csproj" />
+  </ItemGroup>
+</Project>

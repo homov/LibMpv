@@ -146,7 +146,7 @@ public static unsafe partial class LibMpv
     
     /// <summary>Initialize JVM on android</summary>
     /// <returns>error code</returns>
-    public static int MpvLavcSetJavaVm(IntPtr @jvm) => Vectors.MpvLavcSetJavaVm(@jvm);
+    public static int MpvLavcSetJavaVm(IntPtr @jvm, IntPtr @logCtx) => Vectors.MpvLavcSetJavaVm(@jvm, @logCtx);
     
     /// <summary>Load a config file. This loads and parses the file, and sets every entry in the config file&apos;s default section as if mpv_set_option_string() is called.</summary>
     /// <param name="filename">absolute path to the config file on the local filesystem</param>

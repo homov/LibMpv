@@ -23,15 +23,12 @@ public class VideoView : NativeControlHost
         public MpvSurfaceView(Context context) : base(context)
         {
             this.SetZOrderOnTop(true);
-            Holder.AddCallback(this);
+            Holder?.AddCallback(this);
         }
 
         public void SurfaceChanged(ISurfaceHolder holder, [GeneratedEnum] Format format, int width, int height)
         {
-            if (mpvContext != null)
-            {
-                mpvContext.SetPropertyString("android-surface-size", $"{width}x{height}");
-            }
+            mpvContext?.SetPropertyString("android-surface-size", $"{width}x{height}");
         }
 
         public void SurfaceCreated(ISurfaceHolder holder)
@@ -53,25 +50,39 @@ public class VideoView : NativeControlHost
         public void Attach(MpvContext mpvContext)
         {
             this.mpvContext = mpvContext;
-            if (nativeHandle != IntPtr.Zero && mpvContext!=null)
+            if (nativeHandle != IntPtr.Zero && mpvContext != null)
+            {
+                mpvContext?.SetOptionString("vo", "gpu");
+                mpvContext?.SetOptionString("gpu-context", "android");
+                mpvContext?.SetOptionString("opengl-es", "yes");
                 mpvContext?.ConfigureRenderer(new NativeRendererConfiguration() { WindowHandle = nativeHandle });
+                mpvContext?.SetOptionString("force-window", "yes");
+            }
         }
 
         public void Detach()
         {
             if (mpvContext != null)
-                mpvContext.StopRendering();
+            {
+                mpvContext?.SetOptionString("force-window", "no");
+                mpvContext?.StopRendering();
+            }
             mpvContext = null;
         }
     }
 
 
-    public static readonly DirectProperty<NativeVideoView, MpvContext?> MpvContextProperty =
-        AvaloniaProperty.RegisterDirect<NativeVideoView, MpvContext?>(
+    public static readonly DirectProperty<VideoView, MpvContext?> MpvContextProperty =
+        AvaloniaProperty.RegisterDirect<VideoView, MpvContext?>(
                nameof(MpvContext),
                o => o.MpvContext,
                (o, v) => o.MpvContext = v,
                defaultBindingMode: BindingMode.TwoWay);
+
+    public VideoView()
+    {
+        ;
+    }
 
     public MpvContext? MpvContext
     {
@@ -98,7 +109,7 @@ public class VideoView : NativeControlHost
 
     private void AttachMpvContext(MpvContext context)
     {
-        if (platformHandle != null && mpvSurfaceView!=null)
+        if (mpvSurfaceView!=null)
         {
             mpvSurfaceView.Attach(context);
         }
@@ -120,10 +131,8 @@ public class VideoView : NativeControlHost
             DetachMpvContext(mpvContext);
             mpvContext = null;
         }
-        platformHandle = null;
     }
 
-    private IPlatformHandle? platformHandle = null;
     private MpvContext? mpvContext = null;
     private MpvSurfaceView? mpvSurfaceView = null;
 

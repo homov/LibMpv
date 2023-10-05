@@ -1,8 +1,9 @@
 using Avalonia.Controls;
+using FluentAvalonia.UI.Windowing;
 
 namespace SimplePlayer.Avalonia
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : AppWindow
     {
         public MainWindow()
         {

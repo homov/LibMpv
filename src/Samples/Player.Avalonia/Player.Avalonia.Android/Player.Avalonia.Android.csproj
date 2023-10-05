@@ -1,0 +1,197 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net7.0-android</TargetFramework>
+		<SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+		<Nullable>enable</Nullable>
+		<ApplicationId>com.CompanyName.AvaloniaTest</ApplicationId>
+		<ApplicationVersion>1</ApplicationVersion>
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
+		<AndroidEnableProfiledAot>False</AndroidEnableProfiledAot>
+		<PlatformTarget>AnyCPU</PlatformTarget>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<AndroidResource Include="Icon.png">
+			<Link>Resources\drawable\Icon.png</Link>
+		</AndroidResource>
+	</ItemGroup>
+
+	<PropertyGroup>
+		<NativePath>..\..\..\..\natives\android</NativePath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <AndroidCreatePackagePerAbi>True</AndroidCreatePackagePerAbi>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <AndroidCreatePackagePerAbi>True</AndroidCreatePackagePerAbi>
+	</PropertyGroup>
+
+	<ItemGroup Condition="$(AndroidSupportedAbis.Contains('armeabi-v7a')) or $(RuntimeIdentifiers.Contains('android-arm'))">
+		<AndroidNativeLibrary Include="$(NativePath)\armeabi-v7a\libavcodec.so">
+			<Link>armeabi-v7a\libavcodec.so</Link>
+			<Abi>armeabi-v7a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\armeabi-v7a\libavdevice.so">
+			<Link>armeabi-v7a\libavdevice.so</Link>
+			<Abi>armeabi-v7a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\armeabi-v7a\libavfilter.so">
+			<Link>armeabi-v7a\libavfilter.so</Link>
+			<Abi>armeabi-v7a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\armeabi-v7a\libavformat.so">
+			<Link>armeabi-v7a\libavformat.so</Link>
+			<Abi>armeabi-v7a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\armeabi-v7a\libavutil.so">
+			<Link>armeabi-v7a\libavutil.so</Link>
+			<Abi>armeabi-v7a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\armeabi-v7a\libmpv.so">
+			<Link>armeabi-v7a\libmpv.so</Link>
+			<Abi>armeabi-v7a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\armeabi-v7a\libpostproc.so">
+			<Link>armeabi-v7a\libpostproc.so</Link>
+			<Abi>armeabi-v7a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\armeabi-v7a\libswresample.so">
+			<Link>armeabi-v7a\libswresample.so</Link>
+			<Abi>armeabi-v7a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\armeabi-v7a\libswscale.so">
+			<Link>armeabi-v7a\libswscale.so</Link>
+			<Abi>armeabi-v7a</Abi>
+		</AndroidNativeLibrary>
+	</ItemGroup>
+	<ItemGroup Condition="$(AndroidSupportedAbis.Contains('arm64-v8a')) or $(RuntimeIdentifiers.Contains('android-arm64'))">
+		<AndroidNativeLibrary Include="$(NativePath)\arm64-v8a\libavcodec.so">
+			<Link>arm64-v8a\libavcodec.so</Link>
+			<Abi>arm64-v8a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\arm64-v8a\libavdevice.so">
+			<Link>arm64-v8a\libavdevice.so</Link>
+			<Abi>arm64-v8a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\arm64-v8a\libavfilter.so">
+			<Link>arm64-v8a\libavfilter.so</Link>
+			<Abi>arm64-v8a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\arm64-v8a\libavformat.so">
+			<Link>arm64-v8a\libavformat.so</Link>
+			<Abi>arm64-v8a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\arm64-v8a\libavutil.so">
+			<Link>arm64-v8a\libavutil.so</Link>
+			<Abi>arm64-v8a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\arm64-v8a\libmpv.so">
+			<Link>arm64-v8a\libmpv.so</Link>
+			<Abi>arm64-v8a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\arm64-v8a\libpostproc.so">
+			<Link>arm64-v8a\libpostproc.so</Link>
+			<Abi>arm64-v8a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\arm64-v8a\libswresample.so">
+			<Link>arm64-v8a\libswresample.so</Link>
+			<Abi>arm64-v8a</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\arm64-v8a\libswscale.so">
+			<Link>arm64-v8a\libswscale.so</Link>
+			<Abi>arm64-v8a</Abi>
+		</AndroidNativeLibrary>
+	</ItemGroup>
+	<ItemGroup Condition="$(AndroidSupportedAbis.Contains('x86')) or $(RuntimeIdentifiers.Contains('android-arm'))">
+		<AndroidNativeLibrary Include="$(NativePath)\x86\libavcodec.so">
+			<Link>x86\libavcodec.so</Link>
+			<Abi>x86</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86\libavdevice.so">
+			<Link>x86\libavdevice.so</Link>
+			<Abi>x86</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86\libavfilter.so">
+			<Link>x86\libavfilter.so</Link>
+			<Abi>x86</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86\libavformat.so">
+			<Link>x86\libavformat.so</Link>
+			<Abi>x86</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86\libavutil.so">
+			<Link>x86\libavutil.so</Link>
+			<Abi>x86</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86\libmpv.so">
+			<Link>x86\libmpv.so</Link>
+			<Abi>x86</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86\libpostproc.so">
+			<Link>x86\libpostproc.so</Link>
+			<Abi>x86</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86\libswresample.so">
+			<Link>x86\libswresample.so</Link>
+			<Abi>x86</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86\libswscale.so">
+			<Link>x86\libswscale.so</Link>
+			<Abi>x86</Abi>
+		</AndroidNativeLibrary>
+	</ItemGroup>
+	<ItemGroup Condition="$(AndroidSupportedAbis.Contains('x86_64')) or $(RuntimeIdentifiers.Contains('android-x64'))">
+		<AndroidNativeLibrary Include="$(NativePath)\x86_64\libavcodec.so">
+			<Link>x86_64\libavcodec.so</Link>
+			<Abi>x86_64</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86_64\libavdevice.so">
+			<Link>x86_64\libavdevice.so</Link>
+			<Abi>x86_64</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86_64\libavfilter.so">
+			<Link>x86_64\libavfilter.so</Link>
+			<Abi>x86_64</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86_64\libavformat.so">
+			<Link>x86_64\libavformat.so</Link>
+			<Abi>x86_64</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86_64\libavutil.so">
+			<Link>x86_64\libavutil.so</Link>
+			<Abi>x86_64</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86_64\libmpv.so">
+			<Link>x86_64\libmpv.so</Link>
+			<Abi>x86_64</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86_64\libpostproc.so">
+			<Link>x86_64\libpostproc.so</Link>
+			<Abi>x86_64</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86_64\libswresample.so">
+			<Link>x86_64\libswresample.so</Link>
+			<Abi>x86_64</Abi>
+		</AndroidNativeLibrary>
+		<AndroidNativeLibrary Include="$(NativePath)\x86_64\libswscale.so">
+			<Link>x86_64\libswscale.so</Link>
+			<Abi>x86_64</Abi>
+		</AndroidNativeLibrary>
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="Avalonia.Android" Version="11.0.4" />
+		<PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" Version="1.0.1.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\LibMpv.Avalonia\LibMpv.Avalonia.csproj" />
+		<ProjectReference Include="..\Player.Avalonia\Player.Avalonia.csproj" />
+	</ItemGroup>
+</Project>

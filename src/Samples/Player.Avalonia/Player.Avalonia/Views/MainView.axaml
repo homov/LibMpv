@@ -1,0 +1,104 @@
+<UserControl
+    x:Class="Player.Avalonia.Views.MainView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:fa="using:FluentAvalonia.UI.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mpv="clr-namespace:LibMpv.Avalonia;assembly=LibMpv.Avalonia"
+    xmlns:vm="clr-namespace:Player.Avalonia.ViewModels"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:MainViewModel"
+    mc:Ignorable="d">
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Grid RowDefinitions="*,Auto">
+
+        <mpv:OpnGlVideoView MpvContext="{Binding .}" />
+
+        <Grid
+            Grid.Row="1"
+            Margin="5,0,5,0"
+            ColumnDefinitions="Auto,*,Auto,Auto"
+            RowDefinitions="Auto">
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Command="{Binding TogglePlayPauseCommand}"
+                    IsEnabled="{Binding IsInPlayMode}">
+                    <fa:SymbolIcon
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontSize="28"
+                        Symbol="{Binding PlayPauseSymbol}" />
+                </Button>
+            </StackPanel>
+
+            <Grid Grid.Column="1" ColumnDefinitions="Auto,*,Auto">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    IsVisible="{Binding IsTextDurationsVisible}"
+                    Text="{Binding Position, StringFormat={}{0:hh}:{0:mm}:{0:ss}}" />
+                <Slider
+                    Grid.Column="1"
+                    Margin="5,0,5,0"
+                    IsEnabled="{Binding IsSeekable}"
+                    Maximum="100"
+                    Minimum="0"
+                    Value="{Binding PercentPosition}" />
+                <TextBlock
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    IsVisible="{Binding IsTextDurationsVisible}"
+                    Text="{Binding Remaining, StringFormat={}{0:hh}:{0:mm}:{0:ss}}" />
+            </Grid>
+
+            <Grid Grid.Column="2" ColumnDefinitions="Auto,*,Auto">
+
+                <Button
+                    Grid.Column="0"
+                    Background="Transparent"
+                    BorderBrush="Transparent"
+                    Command="{Binding ToggleMuteCommand}">
+                    <fa:SymbolIcon
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="16"
+                        Symbol="{Binding MuteUnmuteSymbol}" />
+                </Button>
+
+                <Slider
+                    Grid.Column="1"
+                    Width="100"
+                    Margin="0,0,5,0"
+                    Maximum="100"
+                    Minimum="0"
+                    Value="{Binding Volume, Mode=TwoWay}" />
+
+
+                <DropDownButton Grid.Column="2">
+                    <DropDownButton.Content>
+                        <fa:SymbolIcon
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            Symbol="More" />
+                    </DropDownButton.Content>
+                    <DropDownButton.Flyout>
+                        <MenuFlyout>
+                            <MenuItem Header="Settings" />
+                            <Separator />
+                            <MenuItem Command="{Binding PlayBigBuckBunnyCommand}" Header="Play 'Big Buck Bunny'" />
+                        </MenuFlyout>
+                    </DropDownButton.Flyout>
+                </DropDownButton>
+            </Grid>
+
+        </Grid>
+    </Grid>
+</UserControl>

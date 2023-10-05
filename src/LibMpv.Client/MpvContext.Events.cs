@@ -53,30 +53,14 @@ public unsafe partial class MpvContext
 
     private void HandlePropertyChange(MpvEvent mpvEvent)
     {
-        if (mpvEvent.ReplyUserdata == InternalReplyUserData)
-        {
-            var mpvProperty = MarshalHelper.PtrToStructure<MpvEventProperty>(mpvEvent.Data);
-            if (mpvProperty != null)
-            {
-                var propertyName = MarshalHelper.PtrToStringUTF8OrNull(mpvProperty.Value.Name);
-                if (propertyName != null)
-                {
-                    string property = String.Empty;
-                    if (PropertyMap.TryGetValue(propertyName, out property))
-                    {
-                        RaisePropertyChange(property);
-                    }
-                }
-            }
-        }
-        else if (MpvPropertyChanged != null)
+        if (MpvPropertyChanged != null)
         {
             var mpvProperty = MarshalHelper.PtrToStructure<MpvEventProperty>(mpvEvent.Data);
             if (mpvProperty == null)
                 return;
 
-            this.GetPropertyReply.Invoke(this, new MpvGetPropertyReplyEventArgs(mpvEvent.ReplyUserdata, (MpvError)mpvEvent.Error, MpvProperty.From(mpvProperty.Value)));
-
+            var property = MpvProperty.From(mpvProperty.Value);
+            this.MpvPropertyChanged.Invoke(this, new MpvGetPropertyReplyEventArgs(mpvEvent.ReplyUserdata, (MpvError)mpvEvent.Error, property));
         }
     }
 

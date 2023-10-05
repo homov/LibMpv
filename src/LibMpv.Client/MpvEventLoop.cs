@@ -49,7 +49,16 @@ internal unsafe class MpvEventLoop : IDisposable
                         {
                             var @event = MarshalHelper.PtrToStructure<MpvEvent>((IntPtr)mpvEvent);
                             if (@event != null)
-                                eventHandler?.Invoke(@event.Value);
+                            {
+                                try
+                                {
+                                    eventHandler?.Invoke(@event.Value);
+                                }
+                                catch (Exception ex)
+                                {
+                                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                                }
+                            }
                         }
                     }
                 }
@@ -96,3 +105,4 @@ internal unsafe class MpvEventLoop : IDisposable
         }
     }
 }
+

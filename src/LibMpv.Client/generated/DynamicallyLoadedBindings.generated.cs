@@ -187,10 +187,10 @@ public static unsafe partial class DynamicallyLoadedBindings
             return Vectors.MpvInitialize(@ctx);
         };
         
-        Vectors.MpvLavcSetJavaVm = (IntPtr @jvm) =>
+        Vectors.MpvLavcSetJavaVm = (IntPtr @jvm, IntPtr @logCtx) =>
         {
-            Vectors.MpvLavcSetJavaVm = FunctionResolver.GetFunctionDelegate<Vectors.MpvLavcSetJavaVmDelegate>("libmpv", "mpv_lavc_set_java_vm", ThrowErrorIfFunctionNotFound) ?? delegate { throw new NotSupportedException(); };
-            return Vectors.MpvLavcSetJavaVm(@jvm);
+            Vectors.MpvLavcSetJavaVm = FunctionResolver.GetFunctionDelegate<Vectors.MpvLavcSetJavaVmDelegate>("libavcodec", "av_jni_set_java_vm", ThrowErrorIfFunctionNotFound) ?? delegate { throw new NotSupportedException(); };
+            return Vectors.MpvLavcSetJavaVm(@jvm, @logCtx);
         };
         
         Vectors.MpvLoadConfigFile = (MpvHandle* @ctx, string @filename) =>

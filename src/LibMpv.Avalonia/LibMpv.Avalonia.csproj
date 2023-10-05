@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0;netstandard2.0;net6.0-android</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;net7.0-android</TargetFrameworks>
 		<LangVersion>latest</LangVersion>
 		<Nullable>enable</Nullable>
 		<IsAndroid>false</IsAndroid>

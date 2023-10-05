@@ -1,9 +1,8 @@
-﻿using System.ComponentModel;
-using System.Text;
+﻿using System.Text;
 
 namespace LibMpv.Client;
 
-public unsafe partial class MpvContext: IDisposable, INotifyPropertyChanged
+public unsafe partial class MpvContext: IDisposable
 {
     public MpvContext()
     {
@@ -20,16 +19,9 @@ public unsafe partial class MpvContext: IDisposable, INotifyPropertyChanged
             ThrowMpvError(result);
         }
 
-        eventLoop = new MpvEventLoop(this.handle, HandleMpvEvent);
+        eventLoop = new(handle, HandleMpvEvent);
         eventLoop.Start();
-
-        InitInternalPropertyObserver();
     }
-
-    #region Properties
-
-    #endregion
-
 
     public void SetLogLevel(MpvLogLevel logLevel)
     {
@@ -79,32 +71,14 @@ public unsafe partial class MpvContext: IDisposable, INotifyPropertyChanged
         }
     }
 
-
-    public void LoadFile(string fileName, string mode="replace")
+    public void ObserveProperty(ulong userData, string propertyName)
     {
-        Command("loadfile", fileName, mode);
+        if (!disposed)
+        {
+            var result = LibMpv.MpvObserveProperty(handle, userData, propertyName, MpvFormat.MpvFormatString);
+            if (result < 0) ThrowMpvError(result);
+        }
     }
-
-    public void Stop()
-    {
-        Command("stop");
-    }
-
-    public void Seek(int amount, string reference= "relative", string precision= "keyframes")
-    {
-        Command("seek", amount.ToString(), reference, precision);
-    }
-
-    public void FrameStep()
-    {
-        Command("frame-step");
-    }
-
-    public void FrameBackStep()
-    {
-        Command("frame_back_step");
-    }
-
 
     public void Command(params string[] args)
     {
@@ -165,6 +139,14 @@ public unsafe partial class MpvContext: IDisposable, INotifyPropertyChanged
         }
         if (result < 0) return null;
         return value[0];
+    }
+
+    public void SetOptionString(string name, string value)
+    {
+        if (disposed || name == null)
+            return;
+        int result = LibMpv.MpvSetPropertyString(handle, name, value);
+        if (result < 0) ThrowMpvError(result);
     }
 
     public void SetPropertyString(string name, string value)

@@ -210,7 +210,7 @@ public static unsafe partial class Vectors
     
     [SuppressUnmanagedCodeSecurity]
     [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-    public delegate int MpvLavcSetJavaVmDelegate(IntPtr @jvm);
+    public delegate int MpvLavcSetJavaVmDelegate(IntPtr @jvm, IntPtr @logCtx);
     public static MpvLavcSetJavaVmDelegate MpvLavcSetJavaVm;
     
     [SuppressUnmanagedCodeSecurity]

@@ -6,6 +6,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Avalonia.Threading;
 using LibMpv.Client;
+using System;
 
 namespace LibMpv.Avalonia;
 
@@ -50,11 +51,11 @@ public class SoftwareVideoView : Control
         var bitmapSize = GetPixelSize();
 
         if (renderTarget == null || renderTarget.PixelSize.Width != bitmapSize.Width || renderTarget.PixelSize.Height != bitmapSize.Height)
-            this.renderTarget = new WriteableBitmap(bitmapSize, new Vector(96.0, 96.0), PixelFormat.Bgra8888, AlphaFormat.Premul);
+            this.renderTarget = new WriteableBitmap(bitmapSize, new Vector(96.0, 96.0), PixelFormat.Rgba8888, AlphaFormat.Premul);
 
         using (ILockedFramebuffer lockedBitmap = this.renderTarget.Lock())
         {
-            mpvContext.RenderBitmap(lockedBitmap.Size.Width, lockedBitmap.Size.Height, lockedBitmap.Address, "bgra");
+            mpvContext.RenderBitmap(lockedBitmap.Size.Width, lockedBitmap.Size.Height, lockedBitmap.Address, "rgba");
         }
         context.DrawImage(this.renderTarget, new Rect(0, 0, renderTarget.PixelSize.Width, renderTarget.PixelSize.Height));
     }
@@ -62,8 +63,7 @@ public class SoftwareVideoView : Control
     private PixelSize GetPixelSize()
     {
         var scaling = VisualRoot!.RenderScaling;
-        //return new PixelSize(Math.Max(1, (int)(Bounds.Width * scaling)),Math.Max(1, (int)(Bounds.Height * scaling)));
-        return new PixelSize((int)Bounds.Width, (int)Bounds.Height);
+        return new PixelSize(Math.Max(1,(int)Bounds.Width), Math.Max(1,(int)Bounds.Height));
     }
 
     private void UpdateVideoView()

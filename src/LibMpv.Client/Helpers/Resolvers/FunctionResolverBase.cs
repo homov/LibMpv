@@ -7,7 +7,8 @@ public abstract class FunctionResolverBase : IFunctionResolver
     public static readonly Dictionary<string, string[]> LibraryDependenciesMap =
         new()
         {
-            { "libmpv", new string[] { } }
+            { "libmpv", new string[] { } },
+            { "libavcodec", new string[] { } }
         };
 
     private readonly Dictionary<string, IntPtr> _loadedLibraries = new();

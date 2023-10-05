@@ -21,9 +21,9 @@ public static class Generator
 
         functionExports.Add(new FunctionExport()
         {
-            LibraryName = "libmpv",
+            LibraryName = "libavcodec",
             LibraryVersion = 0,
-            Name = "mpv_lavc_set_java_vm"
+            Name = "av_jni_set_java_vm"
         });
 
         var processingContext = new ProcessingContext
@@ -60,19 +60,27 @@ public static class Generator
 
         generationContext.Definitions.Add(new ExportFunctionDefinition()
         {
-            LibraryName = "libmpv",
+            LibraryName = "libavcodec",
             LibraryVersion = 0,
-            ExportName = "mpv_lavc_set_java_vm",
+            ExportName = "av_jni_set_java_vm",
             Name = "mpv_lavc_set_java_vm",
             ReturnType = new TypeDefinition() { Name = "int", ByReference = false },
-            Parameters = new FunctionParameter[] { new FunctionParameter()
-            {
-                ByReference = false,
-                Name = "jvm",
-                Type = new TypeDefinition() {  Name = "IntPtr", ByReference = false },
-                Content = ""
-
-            }},
+            Parameters = new FunctionParameter[] { 
+                new FunctionParameter()
+                {
+                    ByReference = false,
+                    Name = "jvm",
+                    Type = new TypeDefinition() {  Name = "IntPtr", ByReference = false },
+                    Content = ""
+                },
+                new FunctionParameter()
+                {
+                    ByReference = false,
+                    Name = "logCtx",
+                    Type = new TypeDefinition() {  Name = "IntPtr", ByReference = false },
+                    Content = ""
+                }
+            },
             Content = "Initialize JVM on android",
             ReturnComment = "error code"
 

@@ -1,4 +1,6 @@
-﻿namespace LibMpv.Client;
+﻿using System;
+
+namespace LibMpv.Client;
 public partial class LibMpv
 {
 
@@ -38,9 +40,9 @@ public partial class LibMpv
             return this;
         }
 
-        public ConfigurationBuilder UserJVM(IntPtr jvmPtr)
+        public ConfigurationBuilder InitAndroid(IntPtr jvmPtr)
         {
-            LibMpv.MpvLavcSetJavaVm(jvmPtr);
+            LibMpv.MpvLavcSetJavaVm(jvmPtr, IntPtr.Zero);
             return this;
         }
 
