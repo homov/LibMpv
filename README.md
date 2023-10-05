@@ -21,7 +21,7 @@ What works:
 
 - Linux (renderers - OpenGl, Software)
 - Windows (renderers - OpenGl, Software, Native window)
-- Android (renderers - OpenGl)
+- Android (renderers - OpenGl). Works on Android Phone Emulator but fails on Android TV Emulator
 
 To-Do:
 - testing, improvements...
