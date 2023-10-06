@@ -37,6 +37,10 @@ VideoView (NativeVideoView) control for WPF
 To-Do:
 - add an example for WPF again
 
+Iptv player sample
+------------------
+Minimal but functional
+
 
 Native binaries
 ---------------
