@@ -253,7 +253,7 @@ public abstract partial class BaseMpvContextViewModel: MpvContext
 
     public void FrameBackStep()
     {
-        Command("frame_back_step");
+        Command("frame-back-step");
     }
 
     void Context_MpvPropertyChanged(object sender, MpvGetPropertyReplyEventArgs e)

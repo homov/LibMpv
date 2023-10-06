@@ -1,0 +1,71 @@
+﻿using IptvPlayer.Model;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System;
+
+namespace IptvPlayer.Services
+{
+    public class SettingsService
+    {
+        static string settingsFileName = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.UserProfile), ".iptv-settings");
+        static SettingsService()
+        {
+            Instance = new SettingsService();
+        }
+
+        public static SettingsService Instance { get;  }
+
+
+        private SettingsModel settings = new();
+
+        public SettingsService()
+        {
+            if (System.IO.File.Exists(settingsFileName))
+            {
+                try
+                {
+                    var settingsData = System.IO.File.ReadAllText(settingsFileName);
+                    settings = System.Text.Json.JsonSerializer.Deserialize<SettingsModel>(settingsData);
+                    if (settings == null)
+                        settings = new();
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.Message);
+                    settings = new();
+                }
+
+            }
+        }
+
+        private void Save()
+        {
+            try
+            {
+                var serializedSettings = System.Text.Json.JsonSerializer.Serialize(settings);
+                System.IO.File.WriteAllText(settingsFileName, serializedSettings);
+            }
+            catch( Exception ex )
+            {
+                System.Diagnostics.Debug.WriteLine(ex.Message);
+            }
+        }
+
+        public string GetChannelGroup() => settings.LastGroup;
+
+        public void SetChannelGroup(string channelGroup)
+        {
+            settings.LastGroup = channelGroup;
+            Save();
+        }
+
+        public string GetPlayList() => settings.PlayList;
+
+
+        public void SetPlayList(string playList)
+        {
+            settings.PlayList = playList;
+            Save();
+        }
+
+    }
+}

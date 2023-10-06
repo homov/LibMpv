@@ -17,7 +17,7 @@
 
     <Grid RowDefinitions="*,Auto">
 
-        <mpv:OpnGlVideoView MpvContext="{Binding .}" />
+        <mpv:VideoView MpvContext="{Binding .}" />
 
         <Grid
             Grid.Row="1"
