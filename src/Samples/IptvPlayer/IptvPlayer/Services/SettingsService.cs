@@ -1,5 +1,4 @@
 ﻿using IptvPlayer.Model;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 
 namespace IptvPlayer.Services
