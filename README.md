@@ -40,6 +40,8 @@ To-Do:
 Iptv player sample
 ------------------
 Minimal but functional
+https://github.com/homov/LibMpv/assets/67293663/8c97b57a-b435-47d8-a793-e56d6109b51c
+
 
 
 Native binaries
