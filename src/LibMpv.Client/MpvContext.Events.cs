@@ -16,8 +16,6 @@ public unsafe partial class MpvContext
 
     public event EventHandler<MpvSetPropertyReplyEventArgs> SetPropertyReply;
 
-    public event EventHandler<MpvGetPropertyReplyEventArgs> MpvPropertyChanged;
-
     private void HandleMpvEvent(MpvEvent mpvEvent)
     {
         switch (mpvEvent.EventId)
@@ -53,14 +51,35 @@ public unsafe partial class MpvContext
 
     private void HandlePropertyChange(MpvEvent mpvEvent)
     {
-        if (MpvPropertyChanged != null)
-        {
-            var mpvProperty = MarshalHelper.PtrToStructure<MpvEventProperty>(mpvEvent.Data);
-            if (mpvProperty == null)
-                return;
+        var mpvProperty = MarshalHelper.PtrToStructure<MpvEventProperty>(mpvEvent.Data);
+        if (mpvProperty == null)
+            return;
 
-            var property = MpvProperty.From(mpvProperty.Value);
-            this.MpvPropertyChanged.Invoke(this, new MpvGetPropertyReplyEventArgs(mpvEvent.ReplyUserdata, (MpvError)mpvEvent.Error, property));
+        var property = MpvProperty.From(mpvProperty.Value);
+
+        if (property.Format == MpvFormat.MpvFormatNone)
+        {
+            lock (propertyChangedActions)
+            {
+                List<Action> actionList;
+                if (propertyChangedActions.TryGetValue(property.Name, out actionList))
+                {
+                    foreach (var action in actionList)
+                        action.Invoke();
+                }
+            }
+        }
+        else if (property.Format == MpvFormat.MpvFormatFlag)
+        {
+            lock (propertyBoolChangedActions)
+            {
+                List<Action<bool>> actionList;
+                if (propertyBoolChangedActions.TryGetValue(property.Name, out actionList))
+                {
+                    foreach (var action in actionList)
+                        action.Invoke(property.BooleanValue.Value);
+                }
+            }
         }
     }
 
@@ -119,6 +138,9 @@ public unsafe partial class MpvContext
         this.eventLoop.Stop();
         this.Shutdown?.Invoke(this, EventArgs.Empty);
     }
+
+    Dictionary<string, List<Action>> propertyChangedActions = new Dictionary<string, List<Action>>();
+    Dictionary<string, List<Action<bool>>> propertyBoolChangedActions = new Dictionary<string, List<Action<bool>>>();
 }
 
 

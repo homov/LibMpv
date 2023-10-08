@@ -1,6 +1,6 @@
-﻿namespace IptvPlayer.Model;
+﻿namespace IptvPlayer.Core.Model;
 
-public class SettingsModel
+public class Settings
 {
     public const string AllChannels = "All Channels";
 

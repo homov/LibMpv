@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Net.Http.Headers;
+using System.Text;
 
 namespace LibMpv.Client;
 
@@ -71,12 +72,49 @@ public unsafe partial class MpvContext: IDisposable
         }
     }
 
-    public void ObserveProperty(ulong userData, string propertyName)
+    public void ObserveProperty(string propertyName, Action changedAction)
     {
         if (!disposed)
         {
-            var result = LibMpv.MpvObserveProperty(handle, userData, propertyName, MpvFormat.MpvFormatString);
-            if (result < 0) ThrowMpvError(result);
+            lock (propertyChangedActions)
+            {
+                List<Action> actionList;
+                if (propertyChangedActions.TryGetValue(propertyName, out actionList))
+                {
+                    actionList.Add(changedAction);
+                }
+                else
+                {
+                    var result = LibMpv.MpvObserveProperty(handle, 0, propertyName, MpvFormat.MpvFormatNone);
+                    if (result < 0) ThrowMpvError(result);
+                    actionList = new();
+                    actionList.Add(changedAction);
+                    propertyChangedActions.Add(propertyName, actionList);
+                }
+            }
+        }
+    }
+
+    public void ObserveProperty(string propertyName, Action<bool> changedAction)
+    {
+        if (!disposed)
+        {
+            lock (propertyBoolChangedActions)
+            {
+                List<Action<bool>> actionList;
+                if (propertyBoolChangedActions.TryGetValue(propertyName, out actionList))
+                {
+                    actionList.Add(changedAction);
+                }
+                else
+                {
+                    var result = LibMpv.MpvObserveProperty(handle, 0, propertyName, MpvFormat.MpvFormatFlag);
+                    if (result < 0) ThrowMpvError(result);
+                    actionList = new();
+                    actionList.Add(changedAction);
+                    propertyBoolChangedActions.Add(propertyName, actionList);
+                }
+            }
         }
     }
 

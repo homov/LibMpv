@@ -5,6 +5,7 @@
     xmlns:al="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:fa="using:FluentAvalonia.UI.Controls"
+    xmlns:ipc="clr-namespace:IptvPlayer.Converters"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mpv="clr-namespace:LibMpv.Avalonia;assembly=LibMpv.Avalonia"
     xmlns:vm="clr-namespace:IptvPlayer.ViewModels"
@@ -128,36 +129,35 @@
         <Grid
             Grid.Row="1"
             Margin="5,0,5,0"
-            ColumnDefinitions="Auto,*,Auto,Auto"
+            ColumnDefinitions="Auto,*,Auto"
             RowDefinitions="Auto">
 
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <Button
                     Background="Transparent"
                     BorderBrush="Transparent"
-                    Command="{Binding TogglePlayPauseCommand}"
-                    IsEnabled="{Binding IsInPlayMode}">
+                    Command="{Binding TogglePlayPauseCommand}">
                     <fa:SymbolIcon
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         FontSize="28"
-                        Symbol="{Binding PlayPauseSymbol}" />
+                        Symbol="{Binding PlayerState, Converter={x:Static ipc:PlayerStateToPlayPauseSymbolConverter.Instance}}" />
                 </Button>
             </StackPanel>
 
             <Grid Grid.Column="1" ColumnDefinitions="Auto,*,Auto">
-                <TextBlock VerticalAlignment="Center" Text="{Binding Position, StringFormat={}{0:hh}:{0:mm}:{0:ss}}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding TimePos, StringFormat={}{0:hh}:{0:mm}:{0:ss}}" />
                 <Slider
                     Grid.Column="1"
                     Margin="5,0,5,0"
                     IsEnabled="{Binding IsSeekable}"
                     Maximum="100"
                     Minimum="0"
-                    Value="{Binding PercentPosition}" />
+                    Value="{Binding PercentPos}" />
                 <TextBlock
                     Grid.Column="2"
                     VerticalAlignment="Center"
-                    Text="{Binding Remaining, StringFormat={}{0:hh}:{0:mm}:{0:ss}}" />
+                    Text="{Binding TimeRemaining, StringFormat={}{0:hh}:{0:mm}:{0:ss}}" />
             </Grid>
 
             <Grid Grid.Column="2" ColumnDefinitions="Auto,*,Auto,Auto">
@@ -171,7 +171,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
                         FontSize="16"
-                        Symbol="{Binding MuteUnmuteSymbol}" />
+                        Symbol="{Binding IsMuted, Converter={x:Static ipc:MuteUnMuteToSymbolConverter.Instance}}" />
                 </Button>
 
                 <Slider
@@ -238,7 +238,7 @@
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Bottom"
                                 Orientation="Horizontal">
-                                <Button Command="{Binding SaveSettingsCommand}" Content="Save" />
+                                <Button Command="{Binding SaveSettingsCommand}" Content="OK" />
                                 <Button
                                     Margin="10,0,0,0"
                                     Command="{Binding CloseSettingsCommand}"

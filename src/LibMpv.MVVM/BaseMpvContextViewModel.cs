@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Input;
 using LibMpv.Client;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 
 namespace LibMpv.MVVM;
@@ -10,64 +9,71 @@ namespace LibMpv.MVVM;
 [ObservableObject]
 public abstract partial class BaseMpvContextViewModel: MpvContext
 {
+    PlayerState playerState = PlayerState.DoesNotPlay;
+    public PlayerState PlayerState => playerState;
+
+    public event Action<PlayerState,PlayerState> PlayerStateChanging;
+
+    public event Action<PlayerState> PlayerStateChanged;
+
     public bool IsPaused
     {
-        get => this.GetPropertyFlag(MpvProperty.Pause) ?? true;
+        get => this.GetPropertyFlag("pause") ?? true;
     }
 
     public long Volume
     {
-        get => this.GetPropertyLong(MpvProperty.Volume) ?? 0;
-        set => this.SetPropertyLong(MpvProperty.Volume, value);
+        get => this.GetPropertyLong("volume") ?? 0;
+        set => this.SetPropertyLong("volume", value);
     }
 
     public bool IsMuted
     {
-        get => this.GetPropertyFlag(MpvProperty.Mute) ?? false;
+        get => this.GetPropertyFlag("mute") ?? false;
     }
 
     public bool IsSeekable
     {
-        get => this.GetPropertyFlag(MpvProperty.Seekable) ?? false;
+        get => this.GetPropertyFlag("seekable") ?? false;
     }
 
     public bool IsBuffering
     {
-        get => this.GetPropertyFlag(MpvProperty.PausedForCache) ?? false;
+        get => this.GetPropertyFlag("paused-for-cache") ?? false;
     }
 
-    public long BufferingProgress
+    public long CacheBufferingState
     {
-        get => this.GetPropertyLong(MpvProperty.CacheBufferingState) ?? 0;
+        get => this.GetPropertyLong("cache-buffering-state") ?? 0;
     }
 
     public TimeSpan Duration
     {
         get
         {
-            var duration = this.GetPropertyDouble(MpvProperty.Duration);
+            var duration = this.GetPropertyDouble("duration");
             if (duration == null)
                 return TimeSpan.FromSeconds(0);
             return TimeSpan.FromSeconds(duration.Value);
         }
     }
 
-    public TimeSpan Remaining
+    public TimeSpan TimeRemaining
     {
         get
         {
-            var remain = this.GetPropertyDouble(MpvProperty.TimeRemaining);
+            var remain = this.GetPropertyDouble("time-remaining");
             if (remain == null)
                 return TimeSpan.FromSeconds(0);
             return TimeSpan.FromSeconds(remain.Value);
         }
     }
 
-    public TimeSpan Position
+    public TimeSpan TimePos
     {
         get
         {
-            var position = this.GetPropertyDouble(MpvProperty.TimePos);
+            var position = this.GetPropertyDouble("time-pos");
             if (position == null)
                 return TimeSpan.FromSeconds(0);
             return TimeSpan.FromSeconds(position.Value);
@@ -80,36 +86,28 @@ public abstract partial class BaseMpvContextViewModel: MpvContext
         }
     }
 
-    public long PercentPosition
+    public long PercentPos
     {
-        get => this.GetPropertyLong(MpvProperty.PercentPos) ?? 0;
+        get => this.GetPropertyLong("percent-pos") ?? 0;
         set
         {
             if (value >=0 && value <= 100)
-                this.SetPropertyLong(MpvProperty.PercentPos, value);
+                this.SetPropertyLong("percent-pos", value);
         }
     }
 
-
-    public string Source
+    public string Path
     {
-        get => this.GetPropertyString(MpvProperty.Path);
+        get => this.GetPropertyString("path");
         set
         {
             if (value != null)
             {
-                if (IsInPlayMode) this.Command("stop");
+                this.Stop();
                 this.Command("loadfile", value, "replace");
             }
         }
     }
-
-    [ObservableProperty]
-    [NotifyCanExecuteChangedFor(nameof(StopCommand))]
-    [NotifyCanExecuteChangedFor(nameof(PlayCommand))]
-    [NotifyCanExecuteChangedFor(nameof(PauseCommand))]
-    [NotifyCanExecuteChangedFor(nameof(TogglePlayPauseCommand))]
-    bool isInPlayMode = false;
 
     public BaseMpvContextViewModel()
     {
@@ -121,17 +119,41 @@ public abstract partial class BaseMpvContextViewModel: MpvContext
 
     public abstract void InvokeInUIThread(Action action);
 
+    private void RaisePropertyChangedInUIThread(string propertyName)
+    {
+        InvokeInUIThread(() => OnPropertyChanged(propertyName));
+    }
+
+    private void SetPlayerState(PlayerState newState)
+    {
+        System.Diagnostics.Debug.WriteLine($"Player state: {newState}");
+        InvokeInUIThread(() =>
+        {
+            PlayerStateChanging?.Invoke(playerState, newState);
+
+            playerState = newState;
+
+            OnPropertyChanged(nameof(PlayerState));
+
+            PlayerStateChanged?.Invoke(playerState);
+
+            StopCommand.NotifyCanExecuteChanged();
+            PlayCommand.NotifyCanExecuteChanged();
+            PauseCommand.NotifyCanExecuteChanged();
+            TogglePlayPauseCommand.NotifyCanExecuteChanged();
+        });
+    }
 
     [RelayCommand]
     protected void ToggleMute()
     {
-        this.Command("cycle", MpvProperty.Mute);
+        this.Command("cycle", "mute");
     }
 
     [RelayCommand(CanExecute = nameof(CanMute))]
-    protected void Mute()
+    public void Mute()
     {
-        this.SetPropertyFlag(MpvProperty.Mute, true);
+        this.SetPropertyFlag("mute", true);
     }
 
     bool CanMute()
@@ -140,9 +162,9 @@ public abstract partial class BaseMpvContextViewModel: MpvContext
     }
 
     [RelayCommand(CanExecute = nameof(CanUnMute))]
-    protected void UnMute()
+    public void UnMute()
     {
-        this.SetPropertyFlag(MpvProperty.Mute, false);
+        this.SetPropertyFlag("mute", false);
     }
 
     bool CanUnMute()
@@ -151,91 +173,64 @@ public abstract partial class BaseMpvContextViewModel: MpvContext
     }
 
     [RelayCommand(CanExecute = nameof(CanStop))]
-    protected void Stop()
+    public void Stop()
     {
         this.Command("stop");
     }
 
     bool CanStop()
     {
-        return IsInPlayMode;
+        return PlayerState != PlayerState.DoesNotPlay;
     }
 
     [RelayCommand(CanExecute = nameof(CanTogglePlayPause))]
-    protected void TogglePlayPause()
+    public void TogglePlayPause()
     {
-        this.Command("cycle", MpvProperty.Pause);
+        this.Command("cycle", "pause");
     }
 
     bool CanTogglePlayPause()
     {
-        return IsInPlayMode;
+        return this.PlayerState == PlayerState.Playing || this.PlayerState == PlayerState.Paused;
     }
 
     [RelayCommand(CanExecute = nameof(CanPlay))]
-    protected void Play()
+    public void Play()
     {
-        this.SetPropertyFlag(MpvProperty.Pause, false);
+        this.SetPropertyFlag("pause", false);
     }
 
     bool CanPlay()
     {
-        return IsInPlayMode && IsPaused;
+        return this.PlayerState == PlayerState.Paused;
     }
 
     [RelayCommand(CanExecute = nameof(CanPause))]
-    protected void Pause()
+    public void Pause()
     {
-        this.SetPropertyFlag(MpvProperty.Pause, true);
+        this.SetPropertyFlag("pause", true);
     }
 
     bool CanPause()
     {
-        return IsInPlayMode && !IsPaused;
+        return this.PlayerState == PlayerState.Playing;
     }
 
     private void Context_StartFile(object sender, EventArgs e)
     {
-        OnPlayStopped(null);
+        SetPlayerState(PlayerState.Loading);
     }
 
     private void Context_FileLoaded(object sender, EventArgs e)
     {
-        OnPlayStarted();
+        SetPlayerState(PlayerState.Playing);
     }
 
     private void Context_EndFile(object sender, MpvEndFileEventArgs e)
     {
-        OnPlayStopped(e.EventData);
+        SetPlayerState(PlayerState.DoesNotPlay);
     }
 
-    public virtual void OnPlayStarted()
-    {
-        InvokeInUIThread( ()=> IsInPlayMode = true);
-    }
-
-    public virtual void OnPlayStopped(MpvEventEndFile? mpvEventEndFile)
-    {
-        InvokeInUIThread(() => IsInPlayMode = false);
-    }
-
-    public virtual void MpvPropertyChangedHandler(string propertyName)
-    {
-        InvokeInUIThread(() =>
-        {
-            OnPropertyChanged(propertyName);
-            if (propertyName == nameof(IsPaused))
-            {
-                PauseCommand.NotifyCanExecuteChanged();
-                PlayCommand.NotifyCanExecuteChanged();
-            }
-            else if (propertyName == nameof(IsMuted))
-            {
-                MuteCommand.NotifyCanExecuteChanged();
-                UnMuteCommand.NotifyCanExecuteChanged();
-            }
-        });
-    }
     public void LoadFile(string fileName, string mode = "replace")
     {
         Command("loadfile", fileName, mode);
@@ -256,42 +251,47 @@ public abstract partial class BaseMpvContextViewModel: MpvContext
         Command("frame-back-step");
     }
 
-    void Context_MpvPropertyChanged(object sender, MpvGetPropertyReplyEventArgs e)
-    {
-        if (e.ReplyUserData == InternalReplyUserData)
-        {
-            string propertyName;
-            if (PropertyMap.TryGetValue(e.EventData.Name, out propertyName))
-            {
-                MpvPropertyChangedHandler( propertyName );
-            }
-        }
-    }
-
-    protected const ulong InternalReplyUserData = 9988776644;
-
     protected virtual void InitPropertyObserver()
     {
-        this.MpvPropertyChanged += Context_MpvPropertyChanged;
-        foreach (var key in PropertyMap.Keys)
+        this.ObserveProperty("paused-for-cache", (bool isBuffering) => 
         {
-            this.ObserveProperty(InternalReplyUserData, key);
-        }
-    }
+            RaisePropertyChangedInUIThread(nameof(IsBuffering));
+            if (isBuffering)
+                SetPlayerState(PlayerState.Buffering);
+            else if (!String.IsNullOrEmpty(Path))
+            {
+                if (this.PlayerState != PlayerState.Playing)
+                    SetPlayerState(PlayerState.Playing);
+            }
+            else
+            {
+                SetPlayerState(PlayerState.DoesNotPlay);
+            }
+        });
 
-    protected Dictionary<string, string> PropertyMap = new()
-    {
-        [MpvProperty.PausedForCache] = nameof(IsBuffering),
-        [MpvProperty.CacheBufferingState] = nameof(BufferingProgress),
-        [MpvProperty.Duration] = nameof(Duration),
-        [MpvProperty.TimePos] = nameof(Position),
-        [MpvProperty.TimeRemaining] = nameof(Remaining),
-        [MpvProperty.Mute] = nameof(IsMuted),
-        [MpvProperty.Volume] = nameof(Volume),
-        [MpvProperty.Seekable] = nameof(IsSeekable),
-        [MpvProperty.Path] = nameof(Source),
-        [MpvProperty.Pause] = nameof(IsPaused),
-        [MpvProperty.PercentPos] = nameof(PercentPosition),
-    };
-    
+        this.ObserveProperty("pause", (bool isPaused) =>
+        {
+            RaisePropertyChangedInUIThread(nameof(IsPaused));
+            if (isPaused)
+                SetPlayerState(PlayerState.Paused);
+            else if  (!String.IsNullOrEmpty(Path))
+                SetPlayerState(PlayerState.Playing);
+            else
+            {
+                SetPlayerState(PlayerState.DoesNotPlay);
+            }
+        });
+
+
+        this.ObserveProperty("cache-buffering-state", () => RaisePropertyChangedInUIThread(nameof(CacheBufferingState)) );
+        this.ObserveProperty("duration", () => RaisePropertyChangedInUIThread(nameof(Duration)) );
+        this.ObserveProperty("time-pos", () => RaisePropertyChangedInUIThread(nameof(TimePos)) );
+        this.ObserveProperty("time-remaining", () => RaisePropertyChangedInUIThread(nameof(TimeRemaining)) );
+        this.ObserveProperty("mute", () => RaisePropertyChangedInUIThread(nameof(IsMuted)) );
+        this.ObserveProperty("volume", () => RaisePropertyChangedInUIThread(nameof(Volume)) );
+        this.ObserveProperty("seekable", () => RaisePropertyChangedInUIThread(nameof(IsSeekable)) );
+        this.ObserveProperty("path", () => RaisePropertyChangedInUIThread(nameof(Path)) );
+        this.ObserveProperty("percent-pos", () => RaisePropertyChangedInUIThread(nameof(PercentPos)) );
+    }
+  
 }

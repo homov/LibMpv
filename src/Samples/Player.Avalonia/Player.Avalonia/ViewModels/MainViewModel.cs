@@ -17,26 +17,6 @@ public partial class MainViewModel : BaseMpvContextViewModel
     public MainViewModel()
     {
         this.Volume = 50;
-        this.PropertyChanged += MainViewModel_PropertyChanged;
-    }
-
-    private void MainViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName ==  nameof(this.IsInPlayMode)) 
-        { 
-            if (IsInPlayMode)
-                PlayPauseSymbol = this.IsPaused ? Symbol.PlayFilled : Symbol.PauseFilled;
-            else
-                PlayPauseSymbol = Symbol.PlayFilled;
-        }
-        else if (e.PropertyName == nameof(this.IsPaused))
-        {
-            PlayPauseSymbol = this.IsPaused || string.IsNullOrEmpty(Source) ? Symbol.PlayFilled : Symbol.PauseFilled;
-        }
-        else if (e.PropertyName == nameof(this.IsMuted))
-        {
-            MuteUnmuteSymbol = this.IsMuted ? Symbol.Mute : Symbol.Volume;
-        }
     }
 
 

@@ -1,7 +1,7 @@
-﻿using IptvPlayer.Model;
+﻿using IptvPlayer.Core.Model;
 using System;
 
-namespace IptvPlayer.Services
+namespace IptvPlayer.Core.Services
 {
     public class SettingsService
     {
@@ -14,7 +14,7 @@ namespace IptvPlayer.Services
         public static SettingsService Instance { get;  }
 
 
-        private SettingsModel settings = new();
+        private Settings settings = new();
 
         public SettingsService()
         {
@@ -23,7 +23,7 @@ namespace IptvPlayer.Services
                 try
                 {
                     var settingsData = System.IO.File.ReadAllText(settingsFileName);
-                    settings = System.Text.Json.JsonSerializer.Deserialize<SettingsModel>(settingsData);
+                    settings = System.Text.Json.JsonSerializer.Deserialize<Settings>(settingsData);
                     if (settings == null)
                         settings = new();
                 }

@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using static LibMpv.WPF.VideoHwndHost;
 
 namespace LibMpv.WPF;
 
@@ -16,12 +17,13 @@ internal class VideoHwndHost: HwndHost
     protected override HandleRef BuildWindowCore(HandleRef hWndParent)
     {
         CustomWindProcDelegate = CustomWndProc;
-        var windClass = new WNDCLASS();
+
+        var windClass = WNDCLASSEX.Build();
         windClass.lpszClassName = CustomClassName;
         windClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(CustomWindProcDelegate);
         windClass.hbrBackground = CreateSolidBrush(0);
+        var classAtom = RegisterClassEx(ref windClass);
 
-        var classAtom = RegisterClass(ref windClass);
         var lastError = Marshal.GetLastWin32Error();
 
         if (classAtom == 0 && lastError != ERROR_CLASS_ALREADY_EXISTS)
@@ -31,7 +33,7 @@ internal class VideoHwndHost: HwndHost
 
         IntPtr intPtr = CreateWindowEx(
             0,
-            windClass.lpszClassName, 
+            CustomClassName, 
             string.Empty, 
             WindowStyles.WS_CHILD | WindowStyles.WS_VISIBLE, 
             0, 0, 0, 0, 
@@ -43,7 +45,7 @@ internal class VideoHwndHost: HwndHost
         lastError = Marshal.GetLastWin32Error();
         if (lastError != 0)
         {
-            throw new Exception("Could not create window");
+            throw new Exception($"Could not create window: {lastError}");
         }
         return new HandleRef(this, intPtr);
     }
@@ -69,23 +71,7 @@ internal class VideoHwndHost: HwndHost
         return DefWindowProc(hWnd, msg, wParam, lParam);
     }
 
-    internal void RegisterWindow()
-    {
-        CustomWindProcDelegate = CustomWndProc;
-        var windClass = new WNDCLASS();
-        windClass.lpszClassName = CustomClassName;
-        windClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(CustomWindProcDelegate);
-        windClass.hbrBackground = CreateSolidBrush(0);
-
-        var classAtom = RegisterClass(ref windClass);
-        var lastError = Marshal.GetLastWin32Error();
-
-        if (classAtom == 0 && lastError != ERROR_CLASS_ALREADY_EXISTS)
-        {
-            throw new Exception("Could not register window class");
-        }
-    }
-
+    
     internal delegate IntPtr CustomWndProcDelegate(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
     internal CustomWndProcDelegate CustomWindProcDelegate;
     
@@ -93,11 +79,13 @@ internal class VideoHwndHost: HwndHost
     [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
     private static extern IntPtr DefWindowProc(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
 
-    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    [DllImport("user32.dll", SetLastError = true)]
     internal static extern IntPtr CreateWindowEx(
-        ExtendedWindowStyles dwExStyle, 
-        [MarshalAs(UnmanagedType.LPStr)] string lpClassName, 
-        [MarshalAs(UnmanagedType.LPStr)] string lpWindowName, 
+        ExtendedWindowStyles dwExStyle,
+        [MarshalAs(UnmanagedType.LPWStr)]
+        string lpClassName,
+        [MarshalAs(UnmanagedType.LPWStr)]
+        string lpWindowName, 
         WindowStyles dwStyle, 
         int x, int y, int nWidth, int nHeight, 
         IntPtr hWndParent, 
@@ -107,10 +95,7 @@ internal class VideoHwndHost: HwndHost
 
     [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
     internal static extern bool DestroyWindow(IntPtr hWnd);
-
-    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-    internal static extern UInt16 RegisterClass([In] ref WNDCLASS lpWndClass);
-
+   
     [DllImport("gdi32.dll", CharSet = CharSet.Auto)]
     internal static extern IntPtr CreateSolidBrush(uint theColor);
 
@@ -131,29 +116,35 @@ internal class VideoHwndHost: HwndHost
         WS_VISIBLE = 0x10000000
     }
 
+    [DllImport("user32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.U2)]
+    static extern short RegisterClassEx([In] ref WNDCLASSEX lpwcx);
+
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-    internal struct WNDCLASS
+    internal struct WNDCLASSEX
     {
-        public readonly uint style;
-
+        [MarshalAs(UnmanagedType.U4)]
+        public int cbSize;
+        [MarshalAs(UnmanagedType.U4)]
+        public int style;
         public IntPtr lpfnWndProc;
-
-        public readonly int cbClsExtra;
-
-        public readonly int cbWndExtra;
-
-        public readonly IntPtr hInstance;
-
-        public readonly IntPtr hIcon;
-
-        public readonly IntPtr hCursor;
-
+        public int cbClsExtra;
+        public int cbWndExtra;
+        public IntPtr hInstance;
+        public IntPtr hIcon;
+        public IntPtr hCursor;
         public IntPtr hbrBackground;
-
-        [MarshalAs(UnmanagedType.LPStr)]
-        public readonly string lpszMenuName;
-
-        [MarshalAs(UnmanagedType.LPStr)]
+        [MarshalAs(UnmanagedType.LPWStr)]
+        public string lpszMenuName;
+        [MarshalAs(UnmanagedType.LPWStr)]
         public string lpszClassName;
+        public IntPtr hIconSm;
+
+        public static WNDCLASSEX Build()
+        {
+            var nw = new WNDCLASSEX();
+            nw.cbSize = Marshal.SizeOf(typeof(WNDCLASSEX));
+            return nw;
+        }
     }
 }
