@@ -147,10 +147,9 @@
 
             <Grid Grid.Column="1" ColumnDefinitions="Auto,*,Auto">
                 <TextBlock VerticalAlignment="Center" Text="{Binding TimePos, StringFormat={}{0:hh}:{0:mm}:{0:ss}}" />
-                <Slider
+                <ProgressBar
                     Grid.Column="1"
                     Margin="5,0,5,0"
-                    IsEnabled="{Binding IsSeekable}"
                     Maximum="100"
                     Minimum="0"
                     Value="{Binding PercentPos}" />
