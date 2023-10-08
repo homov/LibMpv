@@ -21,28 +21,26 @@ What works:
 
 - Linux (renderers - OpenGl, Software)
 - Windows (renderers - OpenGl, Software, Native window)
-- Android (renderers - OpenGl). Works on Android Phone Emulator but fails on Android TV Emulator
+- Android (renderers - OpenGl). Works on Android Phone emulator but fails on Android TV emulator
 
 To-Do:
 - testing, improvements...
-- improve the example
 - iOS
 - MacOS
 
 
 LibMpv.WPF
 ----------
-VideoView (NativeVideoView) control for WPF
+VideoView (NativeVideoView) control for WPF (an attempt to solve the airspace issue)
 
 To-Do:
-- add an example for WPF again
+- add simple example for WPF again
 
 Iptv player sample
 ------------------
-Minimal but functional
+Minimal but functional (Avaonia, WPF)
 
 https://github.com/homov/LibMpv/assets/67293663/8c97b57a-b435-47d8-a793-e56d6109b51c
-
 
 
 Native binaries
